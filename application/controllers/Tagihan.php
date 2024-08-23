@@ -209,6 +209,11 @@ class Tagihan extends CI_Controller
     }
 
 
+
+
+
+
+
     // pelunasan
     public function cari_pelanggan()
     {
@@ -229,20 +234,131 @@ class Tagihan extends CI_Controller
 
     public function hasil_pencarian()
     {
-        $data['title'] = 'Hasil Pencarian';
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
+        $this->load->model('Admin_model','admin');
 
-        $this->session->set_flashdata('msg_putus','<div class="alert alert-danger" role="alert">FITUR BELUM TERSEDIA!</div>');
+        $find = $this->input->post('cari', true);
+        $filter = $this->input->post('filter_by', true);
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('auth/index', $data);
-        $this->load->view('templates/footer');       
+        if($find) {
+            if($filter == 1) {
+
+                $dtByID = $this->admin->GetDataById('plng','no_plng',$find);
+
+                if(!is_null($dtByID)){
+                    if($dtByID['stts'] == 1) {
+                        // status pelanggan aktif 
+                        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">ID Pelanggan berhasil ditemukan!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button></div>');
+    
+                        redirect('tagihan/detail_pencarian/'.$dtByID['id_plng']);
+                    } else {
+                        // status pelanggan non aktif
+                        $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">ID Pelanggan tidak Aktif!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button></div>');
+                        redirect('tagihan/cari_pelanggan');
+                    }
+        
+                } else {
+                    $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">ID Pelanggan tidak ditemukan!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></div>');
+                    redirect('tagihan/cari_pelanggan');
+                }
+
+            } else {
+
+
+                $data['title'] = 'Hasil Pencarian';
+                $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+                $data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
+                
+                $jml_caracter = strlen($find);
+
+                if($jml_caracter >= 3) {
+
+                    $all_cust = $this->tagihan->fetch_data($find);
+
+
+                    if(isset($all_cust[0])){
+
+                        $result_data = array();
+                        foreach($all_cust as $row){
+
+                            // tambah tagihan
+                            $piutang_in = $this->tagihan->getTagihanByTable('piutang_in', 'plng_id', $row['id_plng']);
+
+                            $nilai_tagih  = 0;
+                            foreach($piutang_in as $p){
+                                $nilai_tagih += $p->nilai;
+                            }
+
+                            // pelunasan tagihan
+                            $piutang_out = $this->tagihan->getTagihanByTable('piutang_out', 'plng_id', $row['id_plng']);
+
+                            $nilai_bayar  = 0;
+                            foreach($piutang_out as $p){
+                                $nilai_bayar += $p->nilai;
+                            }
+
+                            $tagihan_saat_ini = $nilai_tagih - $nilai_bayar;
+
+                            // nm paket
+                            $paketById = $this->admin->GetDataById('paket','id_paket', $row['id_paket']);
+
+
+                            if($tagihan_saat_ini >= 0){
+                                $result_data[] = array(
+                                    'id_plng'  => $row['id_plng'],
+                                    'no_plng'  => $row['no_plng'],
+                                    'nomor_air'=> $row['nomor_air'],
+                                    'nm'       => $row['nm'],
+                                    'paket'    => $paketById['nama'],
+                                    'almt'     => $row['almt'],
+                                    'tagihan'  => $tagihan_saat_ini,
+                                );
+                            }
+                            
+                        }
+
+                        $data['data'] = $result_data;
+
+                        $this->load->view('templates/header', $data);
+                        $this->load->view('templates/sidebar', $data);
+                        $this->load->view('templates/topbar', $data);
+                        $this->load->view('tagihan/hasil_pencarian', $data);
+                        $this->load->view('templates/footer'); 
+
+                    } else {
+                        $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">Pelanggan tidak ditemukan!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button></div>');
+                        redirect('tagihan/cari_pelanggan');
+                    }
+                } else {
+                    $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">Pencarian harus lebih dari 3 karakter!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></div>');
+                    redirect('tagihan/cari_pelanggan');
+                }
+
+            }
+        } else {            
+            $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">Pencarian tidak boleh kosong!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button></div>');
+                redirect('tagihan/cari_pelanggan');
+        }     
     }
 
-    public function detail_pencarian()
+    public function detail_pencarian($id)
     {
         $data['title'] = 'Detail Pencarian';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();

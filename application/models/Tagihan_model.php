@@ -78,4 +78,26 @@ class Tagihan_model extends CI_Model
     }
 
 
+
+
+
+
+
+
+
+    // terkait pencarian tagihan
+    public function fetch_data($find)
+    {
+        $this->db->select("*");
+        $this->db->from("plng");
+        if($find != '')
+        {
+            $this->db->like('nm', $find, 'after'); 
+        }
+        $this->db->order_by('nm', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
 }
