@@ -76,6 +76,8 @@ class Pelanggan_model extends CI_Model
     
 
 
+
+
 	// menampilkan semua data pelanggan
     public function getCustomer()
     {
@@ -134,6 +136,17 @@ class Pelanggan_model extends CI_Model
     public function delete($id)
     {
         return $this->db->delete('plng', ['id_plng' => $id]);
+    }
+
+
+    public function getAllDtPemutusan()
+    {
+        $this->db->select('plng_berhenti.ket, plng_berhenti.tgl as tgl_putus, plng.*, paket.nama as nm_paket');
+        $this->db->from('plng_berhenti');
+        $this->db->join('plng', 'plng_berhenti.id_plng = plng.id_plng', 'left');
+        $this->db->join('paket', 'plng.id_paket = paket.id_paket', 'left');
+        $query = $this->db->get()->result_array();
+        return $query;
     }
 }
     

@@ -3,10 +3,10 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('dashboard'); ?>">
-        <div class="sidebar-brand-icon rotate-n-15">
+        <div class="sidebar-brand-icon">
           <i class="fas fa-fw fa-user"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Manajemen User APP</div>
+        <div class="sidebar-brand-text mx-3">EBILL PDAM</div>
       </a>
 
       <!-- Divider -->
@@ -38,7 +38,7 @@
       <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('pelanggan/putus_berlangganan'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Pelanggan Putus *</span></a>
+          <span>Pelanggan Putus</span></a>
       </li>
 
       <!-- Nav Item - Charts -->
@@ -61,14 +61,14 @@
       <li class="nav-item">
         <a class="nav-link" href="<?= base_url('tagihan/cari_pelanggan'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Pelunasan</span></a>
+          <span>Cari Pelanggan</span></a>
       </li>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('tagihan/laporan_pelunasan'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Laporan Pelunasan *</span></a>
+          <span>Laporan Pelunasan</span></a>
       </li>
 
       <!-- Divider -->
@@ -88,30 +88,23 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link pt-0" href="<?= base_url('tagihan/laporan_lunas'); ?>">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Tagihan Lunas *</span></a>
-      </li>
-
-      <!-- Nav Item - Charts -->
-      <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('tagihan/laporan_belum_lunas'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Tagihan Belum Lunas *</span></a>
+          <span>Tagihan Belum Lunas</span></a>
       </li>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('tagihan/cek_pelunasan'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Cek Pelunasan *</span></a>
+          <span>Cek Pelunasan</span></a>
       </li>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('tagihan/laporan_setoran'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Riwayat Setoran *</span></a>
+          <span>Riwayat Setoran</span></a>
       </li>
 
       <!-- Divider -->
@@ -163,7 +156,7 @@
       <li class="nav-item">
         <a class="nav-link pt-0" href="<?= base_url('log'); ?>">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Riwayat Aktivitas *</span></a>
+          <span>Riwayat Aktivitas</span></a>
       </li>
 
       <!-- Divider -->

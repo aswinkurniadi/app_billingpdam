@@ -19,10 +19,33 @@ class Dashboard extends CI_Controller
 		// GetData
 		$data['jumlahuser'] = $this->admin->count('user');
 
-		$this->load->view('templates/header', $data);
-		$this->load->view('templates/sidebar', $data);
-		$this->load->view('templates/topbar', $data);
-		$this->load->view('dashboard', $data);
-		$this->load->view('templates/footer');
+        $data['cabang'] = $this->admin->getAllByTable('cabang', 'id_cabang', 'ASC');
+        $data['id_cabang'] = $data['user']['id_cab'];
+
+		$this->form_validation->set_rules('cabang','', 'required');
+        if( $this->form_validation->run() == false ){
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('dashboard', $data);
+			$this->load->view('templates/footer');
+        } else {
+            $data['id_cabang'] = $this->input->post('cabang');
+
+            // update id_cabang
+            $this->db->set('id_cab', $data['id_cabang']);
+
+            $this->db->where('id_user', $data['user']['id_user']);
+            $this->db->update('user');
+
+            $this->session->set_flashdata('message', '
+            <div class="alert alert-success" role="alert">
+                Cabang berhasil diubah!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>');
+            redirect('dashboard');
+        }
 	}
 }

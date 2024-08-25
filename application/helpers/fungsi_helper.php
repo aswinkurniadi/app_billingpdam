@@ -13,6 +13,8 @@ function is_logged_in()
     }   
 }
 
+
+
 function is_admin()
 {
     $ci = get_instance();

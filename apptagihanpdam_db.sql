@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2024 at 10:33 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 7.3.29
+-- Generation Time: Aug 25, 2024 at 06:14 AM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `manajemenuser_db`
+-- Database: `apptagihanpdam_db`
 --
 
 -- --------------------------------------------------------
@@ -37,8 +38,17 @@ CREATE TABLE `cabang` (
 --
 
 INSERT INTO `cabang` (`id_cabang`, `nama`) VALUES
-(2, 'tes1'),
-(3, 'tes2');
+(2, 'Ka. Tunggal'),
+(3, 'Merlung'),
+(4, 'P.Dagang'),
+(5, 'T.Nilau'),
+(6, 'S.Rambai'),
+(7, 'BTG.Asam'),
+(8, 'M.Papalik'),
+(9, 'T.TinGGI'),
+(10, 'Senyerang'),
+(11, 'Prt.pudin'),
+(12, 'Ranah mandalo');
 
 -- --------------------------------------------------------
 
@@ -68,8 +78,16 @@ CREATE TABLE `log` (
   `id_log` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `ket` text NOT NULL,
-  `waktu` datetime NOT NULL
+  `waktu` text NOT NULL,
+  `url` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`id_log`, `id_user`, `ket`, `waktu`, `url`) VALUES
+(3, 7, 'menambahkan pelanggan baru', '1724558454', 'tagihan/add');
 
 -- --------------------------------------------------------
 
@@ -110,7 +128,7 @@ CREATE TABLE `paket` (
 --
 
 INSERT INTO `paket` (`id_paket`, `nama`, `nilai`) VALUES
-(1, 'internet cepat', 100000);
+(1, 'Air ', 100000);
 
 -- --------------------------------------------------------
 
@@ -150,7 +168,7 @@ CREATE TABLE `piutang_out` (
   `id_kas` int(11) NOT NULL,
   `dibayar` varchar(288) NOT NULL,
   `diterima` varchar(288) NOT NULL,
-  `ket` text NOT NULL
+  `ket` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -176,7 +194,21 @@ CREATE TABLE `plng` (
 --
 
 INSERT INTO `plng` (`id_plng`, `no_plng`, `tgl`, `nm`, `almt`, `no_telp`, `nomor_air`, `id_paket`, `stts`) VALUES
-(1, 1, '2024-08-15', 'aswin', 'magetan', '0895396051690', '998536521', 1, 1);
+(1, 1, '2024-08-15', 'aswin', 'magetan', '0895396051690', '998536521', 1, 1),
+(6, 2, '2024-08-25', 'andi', 'tes', '123', '213', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `plng_berhenti`
+--
+
+CREATE TABLE `plng_berhenti` (
+  `id_pb` int(11) NOT NULL,
+  `id_plng` int(11) NOT NULL,
+  `tgl` datetime NOT NULL,
+  `ket` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -200,7 +232,30 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`id_profile`, `name`, `almt`, `no_telp`, `email`, `logo`, `deskripsi`, `time_zone`) VALUES
-(1, 'SARANGAN VISION', '-', '-', 'admin@gmail.com', 'logo.png', '-', 'Asia/Jakarta');
+(1, 'TIRTA PANGABUAN', '-', '-', 'admin@gmail.com', 'logo.png', '-', 'Asia/Jakarta');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setoran`
+--
+
+CREATE TABLE `setoran` (
+  `id_setoran` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `tgl` date NOT NULL,
+  `nilai` bigint(20) NOT NULL,
+  `ket` text NOT NULL,
+  `file` text NOT NULL,
+  `stts` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `setoran`
+--
+
+INSERT INTO `setoran` (`id_setoran`, `id_user`, `tgl`, `nilai`, `ket`, `file`, `stts`) VALUES
+(5, 7, '2024-08-25', 10000, 'tes', '', 1);
 
 -- --------------------------------------------------------
 
@@ -262,8 +317,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `name`, `email`, `image`, `password`, `id_role`, `is_active`, `date_created`, `id_cab`) VALUES
-(7, 'administrator', 'aswin kurniadi', 'direktur@gmail.com', 'default2.jpg', '$2y$10$f/Nf4WIaWNmXEPLAniBwNeNSl7IAO1zWCNkAl9xNrcj07bZghisxa', 1, 1, 1723623356, 2),
-(14, 'user', 'Aswin Kurniadi', 'admin@gmail.com', 'default.jpg', '$2y$10$eqZeNpKhpOvWPRIzQi7TZOT5SdsbMvQfVN2PHELmeuW8BGkHpPd6G', 2, 1, 1723623360, 3);
+(7, 'administrator', 'aswin kurniadi', 'direktur@gmail.com', 'default2.jpg', '$2y$10$f/Nf4WIaWNmXEPLAniBwNeNSl7IAO1zWCNkAl9xNrcj07bZghisxa', 1, 1, 1723623356, 3),
+(14, 'user', 'budi ', 'admin@gmail.com', 'default.jpg', '$2y$10$eqZeNpKhpOvWPRIzQi7TZOT5SdsbMvQfVN2PHELmeuW8BGkHpPd6G', 2, 1, 1723623360, 3);
 
 -- --------------------------------------------------------
 
@@ -376,10 +431,22 @@ ALTER TABLE `plng`
   ADD PRIMARY KEY (`id_plng`);
 
 --
+-- Indexes for table `plng_berhenti`
+--
+ALTER TABLE `plng_berhenti`
+  ADD PRIMARY KEY (`id_pb`);
+
+--
 -- Indexes for table `profile`
 --
 ALTER TABLE `profile`
   ADD PRIMARY KEY (`id_profile`);
+
+--
+-- Indexes for table `setoran`
+--
+ALTER TABLE `setoran`
+  ADD PRIMARY KEY (`id_setoran`);
 
 --
 -- Indexes for table `sub_menu`
@@ -414,7 +481,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `cabang`
 --
 ALTER TABLE `cabang`
-  MODIFY `id_cabang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cabang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `kas`
@@ -426,7 +493,7 @@ ALTER TABLE `kas`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id_log` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_log` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `menu`
@@ -450,19 +517,31 @@ ALTER TABLE `piutang_in`
 -- AUTO_INCREMENT for table `piutang_out`
 --
 ALTER TABLE `piutang_out`
-  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `plng`
 --
 ALTER TABLE `plng`
-  MODIFY `id_plng` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_plng` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `plng_berhenti`
+--
+ALTER TABLE `plng_berhenti`
+  MODIFY `id_pb` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
   MODIFY `id_profile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `setoran`
+--
+ALTER TABLE `setoran`
+  MODIFY `id_setoran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sub_menu`

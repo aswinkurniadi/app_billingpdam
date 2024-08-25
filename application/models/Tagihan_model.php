@@ -99,5 +99,97 @@ class Tagihan_model extends CI_Model
         return $query->result_array();
     }
 
+    // 
+    public function insertPelunasanTagihan($user_id, $nilai_new)
+    {
+        $data = [
+            "id_piut"   => "",
+            "plng_id"   => $this->input->post('id_plng', true),
+            "nilai"     => intval($nilai_new),
+            "bln"       => $this->input->post('bln', true),
+            "id_kas"    => $this->input->post('kas', true),
+            "tgl"       => $this->input->post('tgl', true),
+            "user_id"   => $user_id,
+            "dibayar"   => $this->input->post('dibayar', true),
+            "diterima"  => $this->input->post('diterima', true),
+        ];
+
+        $this->db->insert('piutang_out', $data);
+    }
+
+    public function getDataRepayment($tglAwal, $tglAkhir, $col)
+    {
+        $this->db->select('
+                piutang_out.id_piut, piutang_out.nilai, piutang_out.bln, piutang_out.tgl,
+                user.name,
+                plng.id_plng, plng.no_plng, plng.nm, plng.almt,
+                kas.nm_kas, kas.id_kas
+                ');
+            $this->db->from('piutang_out');
+            $this->db->join('plng', 'piutang_out.plng_id = plng.id_plng');
+            $this->db->join('kas', 'piutang_out.id_kas = kas.id_kas');
+            $this->db->join('user', 'piutang_out.user_id = user.id_user','left');
+            
+            $array = array('piutang_out.tgl >=' => $tglAwal, 'piutang_out.tgl <=' => $tglAkhir, 'piutang_out.user_id' => $col);
+        $this->db->where($array);
+        $this->db->order_by('piutang_out.tgl', 'asc');
+        return $this->db->get()->result_array();        
+    }
+
+    public function getDataRepaymentByKas($tglAwal, $tglAkhir, $cabang , $col = null, $kas = null)
+    {
+        $this->db->select('
+                piutang_out.id_piut, piutang_out.nilai, piutang_out.bln, piutang_out.tgl,
+                user.name,
+                plng.id_plng, plng.no_plng, plng.nm, plng.almt, plng.tgl as tgl_pasang,
+                kas.nm_kas, kas.id_kas
+                ');
+            $this->db->from('piutang_out');
+            $this->db->join('plng', 'piutang_out.plng_id = plng.id_plng','left');
+            $this->db->join('kas', 'piutang_out.id_kas = kas.id_kas','left');
+            $this->db->join('user', 'piutang_out.user_id = user.id_user','left');
+        if($col == null && $kas != null) {
+            $array = array('piutang_out.tgl >=' => $tglAwal, 'piutang_out.tgl <=' => $tglAkhir, 'kas.id_kas' => $kas);
+        } else if($col != null && $kas == null) {
+            $array = array('piutang_out.tgl >=' => $tglAwal, 'piutang_out.tgl <=' => $tglAkhir, 'piutang_out.user_id' => $col);
+        } else if($col != null && $kas != null) {
+            $array = array('piutang_out.tgl >=' => $tglAwal, 'piutang_out.tgl <=' => $tglAkhir, 'kas.id_kas' => $kas, 'piutang_out.user_id' => $col);
+        } else {
+            $array = array('piutang_out.tgl >=' => $tglAwal, 'piutang_out.tgl <=' => $tglAkhir);
+        }
+        $this->db->where($array);
+        $this->db->where_in('user.id_cab', $cabang);
+        $this->db->order_by('piutang_out.tgl', 'asc');
+        return $this->db->get()->result_array();
+    }
+
+
+
+    // laporan setoran tagihan
+    public function getDataSetoran()
+    {
+        $this->db->select('*');
+        $this->db->from('setoran');
+        $this->db->join('user', 'setoran.id_user = user.id_user','left');
+        $this->db->order_by('setoran.tgl', 'desc');
+        return $this->db->get()->result_array();
+    }
+
+    public function insert_setoran()
+    {
+
+    }
+
+    public function update_setoran()
+    {
+        
+    }
+
+    public function delete_setoran()
+    {
+        
+    }
+
+
 
 }

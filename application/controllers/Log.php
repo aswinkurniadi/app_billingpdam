@@ -8,17 +8,17 @@ class Log extends CI_Controller
         parent::__construct();
         is_logged_in();
         
-        $this->load->model('Pelanggan_model','pelanggan');
+        $this->load->model('Log_model','riwayat');
     }
     
 	// Masterdata Pelanggan Internet
     public function index()
     {
-        $data['title'] = 'Log';
+        $data['title'] = 'Riwayat Aktivitas';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
 
-        $this->session->set_flashdata('msg_putus','<div class="alert alert-danger" role="alert">FITUR BELUM TERSEDIA!</div>');
+        $data['dtRiwayat'] = $this->riwayat->getAllData();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);

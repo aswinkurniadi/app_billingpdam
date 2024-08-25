@@ -10,11 +10,11 @@
                 <!-- Nested Row within Card Body -->
           <!-- Nested Row within Card Body -->
           <div class="row">
-            <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
+            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
             <div class="col-lg">
               <div class="p-5">
                 <div class="text-center">
-                  <h1 class="h4 text-gray-900 mb-4">APLIKASI USER MANAJEMEN & ROLE AKSES</h1>
+                  <h1 class="h4 text-gray-900 mb-4">EBILL PDAM <br> TIRTA PANGABUAN</h1>
                 </div>
 
                   <?= $this->session->flashdata('message'); ?>

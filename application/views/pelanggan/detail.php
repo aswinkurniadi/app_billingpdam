@@ -14,7 +14,7 @@
 	            		</div>
 	            		<div class="col-sm-6 text-right">				            
 	            		    <?php if ($dtByID->stts != 2) { ?>
-	            			<a href="<?= base_url('pelanggan/ubah_stts_putus/'.$dtByID->id_plng); ?>" class="badge badge-danger">
+	            			<a href="" class="badge badge-danger" data-toggle="modal" data-target="#berhenti_berlangganan" >
                       			<span class="icon text-white-50">
                     			  	<i class="fas fa-fw fa-stop"></i>
                     			</span>
@@ -101,6 +101,25 @@
 				</div>
 			</div>
 		</div>
+
+		<?php if ($dtByID->stts == 2) { ?>
+		<div class="col-sm-4">
+			<div class="card border-bottom-primary shadow mb-4">
+	            <div class="card-header py-3">
+	            	<div class="row">
+	            		<div class="col-sm-6">
+				            <h6 class="m-0 font-weight-bold text-primary mt-2">Alasan berhenti putus <?= '('.$dt_berhenti['tgl'].')'; ?> </h6>
+	            		</div>
+	            	</div>
+	            </div>
+				<div class="card-body">
+					<div class="col-sm">
+						<label><?= $dt_berhenti['ket']; ?></label>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
 		
 	</div>
 
@@ -109,4 +128,35 @@
 
 </div>
 <!-- End of Main Content -->
+
+
+<!-- pemutusan -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="berhenti_berlangganan" tabindex="-1" role="dialog" aria-labelledby="berhenti_berlanggananLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="berhenti_berlanggananLabel">Form Berhenti Berlangganan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="<?= base_url('pelanggan/ubah_stts_putus/'.$dtByID->id_plng); ?>" method="post">
+	      <div class="modal-body">
+			<div class="form-group">
+				<label>Kenapa pelanggan berhenti berlangganan?</label>
+				<textarea cols="1" rows="3" class="form-control" name="ket" placeholder="Masukkan alasan berhenti berlangganan"></textarea>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-danger">Simpan</button>
+	      </div>
+      </form>
+    </div>
+  </div>
+</div> 
+<!-- Tambah piutang cust -->
 

@@ -1,8 +1,21 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800"><?= $title;  ?></h1>
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800"><?= $title;  ?></h1>
+    <form action="" method="post" class="form-inline">
+      <div class="form-group mb-2 mr-2">
+        <select class="form-control" name="cabang" id="cabang" required="">
+            <option value="">Pilih Kantor</option>
+            <?php foreach($cabang as $cab) : ?>
+              <option value="<?= $cab['id_cabang']; ?>" <?= ($id_cabang == $cab['id_cabang']) ? "selected" : null; ?>><?= $cab['nama']; ?></option>
+            <?php endforeach; ?>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-save"></i></button>
+    </form>
+  </div>
   
   <div class="row">
   	<!-- jumlah berita-->

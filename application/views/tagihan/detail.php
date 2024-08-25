@@ -13,7 +13,7 @@
 				            <h6 class="m-0 font-weight-bold text-primary mt-2">Detail pelanggan</h6>
 	            		</div>
 	            		<div class="col-sm-6 text-right">
-				            <a href="<?= base_url('pelanggan/ubah_stts_putus/'.$dtByID->id_plng); ?>" class="badge badge-success">
+				            <a href="<?= base_url('pelanggan/detail/'.$dtByID->id_plng); ?>" target="_BLANK" class="badge badge-success">
                       			<span class="icon text-white-50">
                     			  	<i class="fas fa-fw fa-user"></i>
                     			</span>
@@ -26,44 +26,44 @@
 
 					<div class="col-sm">
 						<div class="form-group row">
-							<label for="no_plng" class="col-sm-3 form-label">ID PLNG</label>
-							<div class="col-sm-9">
+							<label for="no_plng" class="col-sm-4 form-label">ID PLNG</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->no_plng; ?></label>
 						    </div>
 						</div>
 						<div class="form-group row">
-							<label for="tgl" class="col-sm-3 form-label">Tanggal Pasang</label>
-							<div class="col-sm-9">
+							<label for="tgl" class="col-sm-4 form-label">Tanggal Pasang</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->tgl; ?></label>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="nm" class="col-sm-3 form-label">Nama</label>
-							<div class="col-sm-9">
+							<label for="nm" class="col-sm-4 form-label">Nama</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->nm; ?></label>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="almt" class="col-sm-3 form-label">Alamat</label>
-							<div class="col-sm-9">
+							<label for="almt" class="col-sm-4 form-label">Alamat</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->almt; ?></label>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="no_telp" class="col-sm-3 form-label">Nomor Telp</label>
-							<div class="col-sm-9">
+							<label for="no_telp" class="col-sm-4 form-label">Nomor Telp</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->no_telp; ?></label>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="nomor_air" class="col-sm-3 form-label">Nomor Air</label>
-							<div class="col-sm-9">
+							<label for="nomor_air" class="col-sm-4 form-label">Nomor Air</label>
+							<div class="col-sm-8">
 								<label><?= $dtByID->nomor_air; ?></label>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="id_paket" class="col-sm-3 form-label">Paket</label>
-							<div class="col-sm-9">
+							<label for="id_paket" class="col-sm-4 form-label">Paket</label>
+							<div class="col-sm-8">
 								<label>
 									<?php 
 										foreach ($dt_paket as $row) :
@@ -76,8 +76,8 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="stts" class="col-sm-3 form-label">Status</label>
-							<div class="col-sm-9">
+							<label for="stts" class="col-sm-4 form-label">Status</label>
+							<div class="col-sm-8">
 								<label>
 									<?php 
 										if($dtByID->stts == 1) {
