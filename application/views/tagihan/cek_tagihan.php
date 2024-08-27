@@ -298,7 +298,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?= base_url('receivablenew/eksport_cek_piutang'); ?>" method="post" target="__BLANK">
+      <form action="<?= base_url('tagihan/ekspor_pelunasan'); ?>" method="post" target="__BLANK">
 	      <div class="modal-body">
 	        <div class="form-group">
 			    <input type="date" class="form-control" id="tglAwal" name="tglAwal" value="<?= (isset($tgl_awal)) ? $tgl_awal : $now; ?>">
@@ -308,20 +308,20 @@
 			</div>
 			<div class="form-group">
 				<select class="form-control " id="colektor" name="colektor">
-		    	    <option value="">Pilih Kolektor</option>
-                	<?php foreach($kolektor as $ko) : ?>
-                	<?php 
-                	       if(isset($id_col)) { 
-                	        if($id_col == $ko['id']) {
-                	                $selected = 'selected';
-                    	        } else {
-                    	            $selected = null;
-                    	        }
-                            } else {
-                                $selected = null;
-                            }; ?>
-						<option value="<?= $ko['id'] ?>" <?= $selected; ?>><?= $ko['name'] ?></option>
-					<?php endforeach; ?>
+		    	    	<option value="">All</option>
+                    	<?php foreach($kolektor as $ko) : ?>
+                    	<?php 
+                    	       if(isset($id_col)) { 
+                    	        	if($id_col == $ko['id_user']) {
+                    	                $selected = 'selected';
+                        	        } else {
+                        	            $selected = null;
+                        	        }
+                                } else {
+                                    $selected = null;
+                                }; ?>
+							<option value="<?= $ko['id_user'] ?>" <?= $selected; ?>><?= $ko['name'] ?></option>
+						<?php endforeach; ?>
 				</select>
 			</div>
 			

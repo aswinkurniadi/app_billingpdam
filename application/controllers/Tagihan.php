@@ -871,7 +871,7 @@ class Tagihan extends CI_Controller
         $data['repayment']  = $this->tagihan->getDataRepayment($tglawal, $tglakhir, $id_user);
         $data['tglAwal']    = $tglawal;
         $data['tglAkhir']   = $tglakhir;
-        $data['menu']       = "Laporan Data Terlunasi";
+        $data['menu']       = "Laporan Pelunasan";
         $data['colektor']   = $user['name'];
         
         $this->load->library('PDF_MC_Table');
@@ -1015,6 +1015,36 @@ class Tagihan extends CI_Controller
             $this->load->view('tagihan/cek_tagihan', $data);
             $this->load->view('templates/footer');    
         }
+    }
+
+    public function ekspor_pelunasan()
+    {
+        $tglawal    = $this->input->post('tglAwal', true);
+        $tglakhir   = $this->input->post('tglAkhir', true);
+        $col        = $this->input->post('colektor', true);
+        $kas        = $this->input->post('kas', true);
+
+        // mencari data yang ada
+        $data['tgl_awal'] = $tglawal;
+        $data['tgl_akhir'] = $tglakhir;
+        $data['id_col'] = $col;
+        $data['id_kas'] = $kas;
+
+        $user_col = $this->db->get_where('user', ['id_user' => $col])->row_array();
+
+        $tglawal_p = date("Y-m-d 00:00:00", strtotime($tglawal));
+        $tglakhir_p = date("Y-m-d 23:59:59", strtotime($tglakhir));
+
+        $data['repayment'] = $this->tagihan->getDataRepaymentByKas($tglawal_p, $tglakhir_p, $data['user']['id_cab'], $col, $kas);
+
+        // mencari data yang ada
+        $data['tglAwal']    = $tglawal;
+        $data['tglAkhir']   = $tglakhir;
+        $data['menu']       = "Laporan Pelunasan";
+        $data['colektor']   = $user_col['name'];
+        
+        $this->load->library('PDF_MC_Table');
+        $this->load->view('tagihan/downloadpdf_laporan_penagihan', $data);
     }
 
     public function ubah_cabang()

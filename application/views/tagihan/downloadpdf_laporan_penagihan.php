@@ -84,42 +84,6 @@ class PDF extends PDF_MC_Table{
                 $this->cell(157,6,'Jumlah',1,0,'R',1);
                 $this->cell(33,6,number_format($total,0,',','.'),1,0,'R',1);
                 
-                // $this->Ln(10);
-                // $this->setFont('Arial','B',9);
-                // $this->setFillColor(255,255,255);
-                // $this->cell(27,6,'Tertagih',0,0,'L',1);
-                // $this->cell(3,6,':',0,0,'C',1);
-                // $this->cell(160,6,'Rp. '.number_format($total,0,',','.').' ,-',0,0,'L',1);
-                
-                // $nota = $i-1;
-                // // $komisi = $komisi;
-                
-                // $this->Ln();
-                // $this->setFont('Arial','B',9);
-                // $this->setFillColor(255,255,255);
-                // $this->cell(27,6,'Jml Nota',0,0,'L',1);
-                // $this->cell(3,6,':',0,0,'C',1);
-                // $this->cell(160,6,$nota,0,0,'L',1);
-                
-                // $komisi_agen = $nota*$komisi;
-                
-                // $this->Ln();
-                // $this->setFont('Arial','B',9);
-                // $this->setFillColor(255,255,255);
-                // $this->cell(27,6,'Komisi',0,0,'L',1);
-                // $this->cell(3,6,':',0,0,'C',1);
-                // $this->cell(160,6,'Rp. '.number_format($komisi_agen,0,',','.').' ,-',0,0,'L',1);
-                
-                // $disetorkan = $total-$komisi_agen;
-                
-                // $this->Ln();
-                // $this->setFont('Arial','B',9);
-                // $this->setFillColor(255,255,255);
-                // $this->cell(27,6,'Disetorkan',0,0,'L',1);
-                // $this->cell(3,6,':',0,0,'C',1);
-                // $this->cell(160,6,'Rp. '.number_format($disetorkan,0,',','.').' ,-',0,0,'L',1);
-                
-                
             } else {
                 $this->Ln();
                 $this->setFont('Arial','',9);
@@ -133,8 +97,8 @@ class PDF extends PDF_MC_Table{
 $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->setTitle('['.$tglAwal.' sd '.$tglAkhir.'] Tagihan Agen '.$colektor,true);
+$pdf->setTitle('['.$tglAwal.' sd '.$tglAkhir.'] Laporan Pelunasan '.$colektor,true);
 $pdf->Content($repayment, $tglAwal, $tglAkhir, $menu, $colektor);
-$pdf->Output('['.$tglAwal.' sd '.$tglAkhir.'] Tagihan Agen '.$colektor.'.pdf', 'I');
+$pdf->Output('['.$tglAwal.' sd '.$tglAkhir.'] Laporan Pelunasan '.$colektor.'.pdf', 'I');
 
 ?>
