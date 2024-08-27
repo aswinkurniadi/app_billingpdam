@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2024 at 06:14 AM
+-- Generation Time: Aug 27, 2024 at 01:10 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -232,7 +232,7 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`id_profile`, `name`, `almt`, `no_telp`, `email`, `logo`, `deskripsi`, `time_zone`) VALUES
-(1, 'TIRTA PANGABUAN', '-', '-', 'admin@gmail.com', 'logo.png', '-', 'Asia/Jakarta');
+(1, 'TIRTA PANGABUAN', '-', '-', 'admin@gmail.com', 'pdam.jpg', '-', 'Asia/Jakarta');
 
 -- --------------------------------------------------------
 
@@ -255,7 +255,7 @@ CREATE TABLE `setoran` (
 --
 
 INSERT INTO `setoran` (`id_setoran`, `id_user`, `tgl`, `nilai`, `ket`, `file`, `stts`) VALUES
-(5, 7, '2024-08-25', 10000, 'tes', '', 1);
+(5, 7, '2024-08-25', 10000, 'tes', '', 0);
 
 -- --------------------------------------------------------
 
@@ -317,7 +317,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `name`, `email`, `image`, `password`, `id_role`, `is_active`, `date_created`, `id_cab`) VALUES
-(7, 'administrator', 'aswin kurniadi', 'direktur@gmail.com', 'default2.jpg', '$2y$10$f/Nf4WIaWNmXEPLAniBwNeNSl7IAO1zWCNkAl9xNrcj07bZghisxa', 1, 1, 1723623356, 3),
+(7, 'administrator', 'aswin kurniadi', 'direktur@gmail.com', 'default2.jpg', '$2y$10$f/Nf4WIaWNmXEPLAniBwNeNSl7IAO1zWCNkAl9xNrcj07bZghisxa', 1, 1, 1723623356, 2),
 (14, 'user', 'budi ', 'admin@gmail.com', 'default.jpg', '$2y$10$eqZeNpKhpOvWPRIzQi7TZOT5SdsbMvQfVN2PHELmeuW8BGkHpPd6G', 2, 1, 1723623360, 3);
 
 -- --------------------------------------------------------
@@ -517,7 +517,7 @@ ALTER TABLE `piutang_in`
 -- AUTO_INCREMENT for table `piutang_out`
 --
 ALTER TABLE `piutang_out`
-  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `plng`
@@ -529,7 +529,7 @@ ALTER TABLE `plng`
 -- AUTO_INCREMENT for table `plng_berhenti`
 --
 ALTER TABLE `plng_berhenti`
-  MODIFY `id_pb` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pb` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `profile`

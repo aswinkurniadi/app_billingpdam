@@ -53,8 +53,8 @@ class Pelanggan extends CI_Controller
             $row[] = $customers->nm;
             $row[] = $customers->almt;
             $row[] = $customers->no_telp;
-            $row[] = $customers->nomor_air;
             $row[] = $paket['nama'];
+            $row[] = $customers->nomor_air;
             $row[] = 'Rp. '.number_format($paket['nilai'],0,',','.').' ,-';
             $row[] = $customers->stts == 0 ? "<span class='badge badge-danger'>Non-Aktif</span>" : "<span class='badge badge-success'>Aktif</span>" ;
             
