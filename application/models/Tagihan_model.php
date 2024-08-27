@@ -40,7 +40,7 @@ class Tagihan_model extends CI_Model
                 a.nilai,
                 '-' as id_kas,
                 '-' as kas,
-                '-' as ket,
+                a.ket,
                 1 as type
             FROM 
                 piutang_in a
@@ -77,7 +77,72 @@ class Tagihan_model extends CI_Model
         return $this->db->delete($table, ['id_piut' => $id]);
     }
 
+    // Tambah baru
+    public function insertTagihanBaru($nilai_new)
+    {
+        $dt_user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
+        $data = [
+            "id_piut"   => "",
+            "plng_id"   => $this->input->post('id_plng', true),
+            "nilai"     => intval($nilai_new),
+            "bln"       => $this->input->post('bln', true),
+            "tgl"       => $this->input->post('tgl', true),
+            "user_id"   => $dt_user['id_user'],
+            "ket"       => $this->input->post('ket', true),
+        ];
+
+        $this->db->insert('piutang_in', $data);
+    }
+    
+    // Tambah baru
+    public function insertPelunasan($nilai_new)
+    {
+        $dt_user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        
+        $data = [
+            "id_piut"   => "",
+            "plng_id"   => $this->input->post('id_plng', true),
+            "nilai"     => intval($nilai_new),
+            "bln"       => $this->input->post('bln', true),
+            "id_kas"    => $this->input->post('kas', true),
+            "tgl"   => $this->input->post('tgl', true),
+            "user_id"   => $dt_user['id_user'],
+            "dibayar"   => $this->input->post('dibayar', true),
+            "diterima"  => $this->input->post('diterima', true),
+            "ket"       => $this->input->post('ket', true),
+        ];
+
+        $this->db->insert('piutang_out', $data);
+    }
+
+    public function updateTagihan($type, $value)
+    {   
+        if($type == 1){
+            $data = [
+                "nilai"     => intval($value),
+                "bln"       => $this->input->post('bln_edit', true),
+                "ket"       => $this->input->post('ket', true)
+            ];
+
+            $this->db->where('id_piut', $this->input->post('id_piut_edit'));
+            $this->db->update('piutang_in', $data);
+        } else {
+            $data = [
+                "id_kas"    => intval($this->input->post('kas_edit', true)),
+                "nilai"     => intval($value),
+                "bln"       => $this->input->post('bln_edit', true),
+                "tgl"       => $this->input->post('tgl_edit', true),
+                "dibayar"   => $this->input->post('dibayar', true),
+                "diterima"  => $this->input->post('diterima', true),
+                "ket"       => $this->input->post('ket', true)
+            ];
+
+            $this->db->where('id_piut', $this->input->post('id_piut_edit'));
+            $this->db->update('piutang_out', $data);
+        }
+    }
+    
 
 
 

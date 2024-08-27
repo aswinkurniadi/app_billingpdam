@@ -114,7 +114,7 @@ class Tagihan extends CI_Controller
         $this->load->model('Admin_model','admin');
 
         date_default_timezone_set('Asia/Jakarta');
-        $data['now'] = date("Y-m-d");
+        $data['now'] = date("Y-m-d H:i:s");
         $data['bulan'] = date("m");
 
         // data by id 
@@ -129,6 +129,21 @@ class Tagihan extends CI_Controller
         // data kas
         $data['datakas'] = $this->admin->getAllByTable('kas', 'id_kas', 'asc');
 
+        // tagihan terakhir
+        $saldo = 0;
+        foreach($data['riw_tagihan'] as $row) { 
+            if($row['type'] == 1) {
+                $id_piut = $row['id_piutang_in'];
+                $saldo += $row['nilai'];
+            } else {
+                $id_piut = $row['id_piutang_out'];
+                $saldo -= $row['nilai'];
+            }
+        }
+
+        $data['tagihan_saat_ini'] = $saldo;
+
+
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);
@@ -140,21 +155,86 @@ class Tagihan extends CI_Controller
     // tambah tagihan
     public function tambah_tagihan()
     {
+        $id_plng    = $this->input->post('id_plng', true);
+        $nilai      = $this->input->post('value', true);
+        $hide       = array("Rp", ".", " ");
+        $nilai_new  = str_replace($hide, "", $nilai);
+
+        $this->tagihan->insertTagihanBaru($nilai_new);
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Tagihan baru berhasil ditambahkan!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('tagihan/detail/'.$id_plng);
+    }
+
+    // tambah pelunasan
+    public function tambah_pelunasan()
+    {
+        $id_plng    = $this->input->post('id_plng', true);
+        $nilai      = $this->input->post('value', true);
+        $hide       = array("Rp", ".", " ");
+        $nilai_new  = str_replace($hide, "", $nilai);
+
+        $this->tagihan->insertPelunasan($nilai_new);
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Pelunasan berhasil ditambahkan! 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('tagihan/detail/'.$id_plng);
+    }
+
+
+    // update piutang in
+    public function ubah_tagihan()
+    {
+        $id_plng      = $this->input->post('id_plng_edit', true);
+        $nilai      = $this->input->post('value_edit', true);
+        $type      = $this->input->post('type_edit', true);
+        $hide       = array("Rp", ".", " ");
+        $nilai_new   = str_replace($hide, "", $nilai);
         
+        // echo $nilai_new;
+        if($type == 1){
+            // piutang in
+            $this->tagihan->updateTagihan($type,$nilai_new);
+        } else {
+            // piutang out
+            $this->tagihan->updateTagihan($type,$nilai_new);
+        }
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Piutang berhasil di ubah! '.$nilai.' 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('tagihan/detail/'.$id_plng);
     }
 
 
     // hapus tagihan in
     public function deleteTagihanIn($id)
     {
+        $data = $this->db->get_where('piutang_in', ['id_piut' => $id])->row();
 
+        $this->tagihan->deleteTagihan('piutang_in', $id);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role has been deleted!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>');
+                redirect('tagihan/detail/'.$data->plng_id);
     }
 
-    // hapus tagihan out
     public function deleteTagihanOut($id)
     {
+        $data = $this->db->get_where('piutang_out', ['id_piut' => $id])->row();
 
+        $this->tagihan->deleteTagihan('piutang_out', $id);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role has been deleted!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>');
+                redirect('tagihan/detail/'.$data->plng_id);
     }
+
 
 
     // laporan belum lunas
