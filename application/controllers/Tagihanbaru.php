@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Paket extends CI_Controller 
+class Tagihanbaru extends CI_Controller 
 { 
 	public function __construct()
 	{
@@ -12,32 +12,18 @@ class Paket extends CI_Controller
 
 	public function index()
 	{
-		$data['title'] = 'Paket';
+		$data['title'] = 'Tagihan baru';
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		$data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
 
-		$data['dt_all'] = $this->admin->getAllByTable('paket', 'id_paket', 'asc');
+		// $data['dt_all'] = $this->admin->getAllByTable('piutang_in', 'id_piut', 'asc');
+		$data['dt_all'] = array();
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/sidebar', $data);
 		$this->load->view('templates/topbar', $data);
-		$this->load->view('setting/paket', $data);
+		$this->load->view('setting/tagihanbaru', $data);
 		$this->load->view('templates/footer');
-	}
-
-	public function add()
-	{
-		$data = [
-	        "nama" => $this->input->post('nama', true),
-	        "nilai" => $this->input->post('nilai', true),
-		];
-
-		$this->admin->addDatabyTable('paket', $data);
-		$this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Data berhasil ditambahkan! 
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		    	<span aria-hidden="true">&times;</span>
-		  	</button></div>');
-			redirect('paket');
 	}
 
 	public function update()

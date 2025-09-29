@@ -30,16 +30,20 @@
 						  <thead class="text-center">
 						  	<tr>
 						      <th scope="col">#</th>
-						      <th scope="col">Nama paket</th>
-						      <th scope="col">Harga</th>
-						      <?php if (is_admin()) : ?>
-							      <th scope="col" rowspan="2">Action</th>
-							  <?php endif; ?>
+						      <th scope="col">Tanggal</th>
+						      <th scope="col">ID PLNG</th>
+						      <th scope="col">Nama</th>
+						      <th scope="col">Nilai Subsidi</th>
+						      <th scope="col">Aksi</th>
 						  	</tr>
 						  </thead>
 						  <tbody>
-						  	<?php $i = 1; ?>
-				  			<?php foreach ($dt_all as $row) : ?>
+						  	<?php 
+						  	$i = 1; 
+						  	$total = 0;
+						  	foreach ($dt_all as $row) : 
+				  				$total += $row['nilai'];
+				  				?>
 						    <tr>
 						      <th width="5%" scope="row"><?= $i++; ?></th>
 						      <td width="40%"><?= $row['nama']; ?></td>
@@ -67,6 +71,13 @@
 						    </tr>
 						    <?php endforeach; ?>
 						  </tbody>
+						  <tfoot>
+						  	<tr>
+						  		<td colspan="4"></td>
+						  		<td align="right"><?= number_format($total,0,',','.'); ?></td>
+						  		<td></td>
+						  	</tr>
+						  </tfoot>
 						</table>
 					</div>
 				</div>

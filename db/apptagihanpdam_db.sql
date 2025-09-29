@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 27, 2024 at 01:10 PM
+-- Generation Time: Aug 27, 2024 at 02:40 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -142,15 +142,17 @@ CREATE TABLE `piutang_in` (
   `plng_id` int(11) NOT NULL,
   `bln` int(11) NOT NULL,
   `nilai` bigint(20) NOT NULL,
-  `user_id` int(11) DEFAULT NULL
+  `user_id` int(11) DEFAULT NULL,
+  `ket` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `piutang_in`
 --
 
-INSERT INTO `piutang_in` (`id_piut`, `tgl`, `plng_id`, `bln`, `nilai`, `user_id`) VALUES
-(1, '2024-08-15 09:39:32', 1, 1, 35000, 7);
+INSERT INTO `piutang_in` (`id_piut`, `tgl`, `plng_id`, `bln`, `nilai`, `user_id`, `ket`) VALUES
+(1, '2024-08-15 09:39:32', 1, 1, 35000, 7, ''),
+(3, '2024-08-27 00:00:00', 6, 8, 1200000, 7, 'tesss');
 
 -- --------------------------------------------------------
 
@@ -170,6 +172,13 @@ CREATE TABLE `piutang_out` (
   `diterima` varchar(288) NOT NULL,
   `ket` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `piutang_out`
+--
+
+INSERT INTO `piutang_out` (`id_piut`, `tgl`, `plng_id`, `bln`, `nilai`, `user_id`, `id_kas`, `dibayar`, `diterima`, `ket`) VALUES
+(1, '2024-08-27 18:59:36', 6, 8, 1000000, 7, 1, 'tes', 'tes', 'tes');
 
 -- --------------------------------------------------------
 
@@ -511,13 +520,13 @@ ALTER TABLE `paket`
 -- AUTO_INCREMENT for table `piutang_in`
 --
 ALTER TABLE `piutang_in`
-  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `piutang_out`
 --
 ALTER TABLE `piutang_out`
-  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_piut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `plng`

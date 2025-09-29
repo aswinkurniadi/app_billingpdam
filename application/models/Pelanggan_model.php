@@ -4,15 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pelanggan_model extends CI_Model
 {
     // Datatables serverside
-    var $column_order = array('plng.id_plng','plng.no_plng','plng.nm','plng.almt','plng.no_telp','plng.nomor_air','paket.nama','paket.nilai'); //set column field database for datatable orderable
-    var $column_search = array('plng.id_plng','plng.no_plng','plng.nm','plng.almt','plng.no_telp','plng.nomor_air','paket.nama','paket.nilai'); //set column field database for datatable searchable 
+    var $column_order = array('plng.id_plng','plng.no_plng','plng.nm','plng.almt','plng.no_telp','plng.nomor_air'); //set column field database for datatable orderable
+    var $column_search = array('plng.id_plng','plng.no_plng','plng.nm','plng.almt','plng.no_telp','plng.nomor_air'); //set column field database for datatable searchable 
     var $order = array('plng.tgl' => 'asc'); // default order 
  
     private function _get_datatables_query()
     {    
-        $this->db->select('plng.*, paket.*');
+        $this->db->select('plng.*');
         $this->db->from('plng');
-        $this->db->join('paket', 'plng.id_paket = paket.id_paket', 'left');
         $this->db->where_in('plng.stts', 1);
 
         $i = 0;
@@ -68,7 +67,6 @@ class Pelanggan_model extends CI_Model
     public function count_all()
     {
         $this->db->from('plng');
-        $this->db->join('paket', 'plng.id_paket = paket.id_paket', 'left');
         $this->db->where_in('plng.stts', 1);
         return $this->db->count_all_results();
     }
@@ -141,10 +139,9 @@ class Pelanggan_model extends CI_Model
 
     public function getAllDtPemutusan()
     {
-        $this->db->select('plng_berhenti.ket, plng_berhenti.tgl as tgl_putus, plng.*, paket.nama as nm_paket');
+        $this->db->select('plng_berhenti.ket, plng_berhenti.tgl as tgl_putus, plng.*');
         $this->db->from('plng_berhenti');
         $this->db->join('plng', 'plng_berhenti.id_plng = plng.id_plng', 'left');
-        $this->db->join('paket', 'plng.id_paket = paket.id_paket', 'left');
         $query = $this->db->get()->result_array();
         return $query;
     }

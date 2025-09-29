@@ -48,4 +48,24 @@ class Dashboard extends CI_Controller
             redirect('dashboard');
         }
 	}
+
+	public function dashboard2()
+	{
+		// dashboard pelanggan
+		$data['title'] = 'PDAM SAYA';
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		$data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
+
+		// GetData
+		$data['jumlahuser'] = $this->admin->count('user');
+
+        $data['cabang'] = $this->admin->getAllByTable('cabang', 'id_cabang', 'ASC');
+        $data['id_cabang'] = $data['user']['id_cab'];
+
+		$this->load->view('templates/header', $data);
+		$this->load->view('templates/sidebar', $data);
+		$this->load->view('templates/topbar', $data);
+		$this->load->view('dashboard2', $data);
+		$this->load->view('templates/footer');
+	}
 }

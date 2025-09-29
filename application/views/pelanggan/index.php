@@ -36,9 +36,7 @@
 			      <th scope="col">Nama</th>
 			      <th scope="col">Alamat</th>
 			      <th scope="col">No Telp</th>
-			      <th scope="col">Paket</th>
 			      <th scope="col">Nomor Air</th>
-			      <th scope="col">Iuran Bulanan</th>
 			      <th scope="col">Status</th>
 			      <th scope="col">Action</th>
 			    </tr>

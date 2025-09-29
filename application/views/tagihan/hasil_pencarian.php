@@ -56,7 +56,6 @@
 				  		<td>ID & Tagihan</td>
 				  		<td>Nama</td>
 				  		<td>Alamat</td>
-				  		<td>Paket</td>
 				  		<td>Nomor</td>
 				  	</tr>
 				  </thead>
@@ -79,7 +78,6 @@
 				  			<br><?= 'Rp. '.number_format($da['tagihan'],0,',','.'); ?></td>
 				  		<td><?= $da['nm']; ?></td>
 				  		<td><?= $da['almt']; ?></td>
-				  		<td><?= $da['paket']; ?></td>
 				  		<td><?= $da['nomor_air']; ?></td>
 				  	</tr>
 				  	<?php endforeach; ?>

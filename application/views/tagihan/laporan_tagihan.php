@@ -3,9 +3,9 @@
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 	    <h1 class="h3 mb-0 text-gray-800"><?= $title;  ?></h1>
 	    <div class="button">
-	    	<a href="<?= base_url('tagihan/cek_pelunasan/'); ?>" class="btn btn-sm btn-primary shadow-sm mr-1 mb-1">
+	    	<a href="<?= base_url('tagihan/cek_pelunasan/'); ?>" class="btn btn-sm btn-secondary shadow-sm mr-1 mb-1">
 		        <i class="fas fa-fw fa-search fa-sm text-white-50"></i>
-		        <span class="text">Cek Pelunasan</span>
+		        <span class="text">Cek Pelunasan By Akun</span>
 		    </a>
 	    </div>
 	</div>	
@@ -80,9 +80,7 @@
 			      <th scope="col">Nama</th>
 			      <th scope="col">Alamat</th>
 			      <th scope="col">No Telp</th>
-			      <th scope="col">Paket</th>
 			      <th scope="col">Nomor Air</th>
-			      <th scope="col">Iuran Bulanan</th>
 			      <th scope="col">Tagihan Saat Ini</th>
 			      <th scope="col">Action</th>
 			    </tr>
@@ -98,9 +96,7 @@
     			      	<td><?= $row['nm']; ?></td>
     			      	<td><?= $row['almt']; ?></td>
     			      	<td><?= $row['no_telp']; ?></td>
-    			      	<td><?= $row['paket']; ?></td>
     			      	<td><?= $row['nomor_air']; ?></td>
-    			      	<td><?= $row['nilai']; ?></td>
     			      	<td class="text-right"><?= $row['tag_saat_ini']; ?></td>
     			      	<td>
                             <a href="<?= base_url('receivablenew/detailReceivable/'.$row['id_plng']) ?>" class="badge badge-success">
@@ -117,7 +113,7 @@
 			  </tbody>
 			  <tfoot>
 			      <tr>
-			          <td colspan="9" class="text-right">Jumlah</td>
+			          <td colspan="6" class="text-right">Jumlah</td>
 			          <td class="text-right"><?= number_format($total_blm_lunas,0,',','.'); ?></td>
 			          <td></td>
 			      </tr>

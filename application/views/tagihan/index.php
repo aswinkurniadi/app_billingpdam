@@ -3,6 +3,16 @@
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 	    <h1 class="h3 mb-0 text-gray-800"><?= $title;  ?></h1>
         
+	    <div class="button">
+	    	<a href="<?= base_url('tagihan/laporan_belum_lunas/'); ?>" class="btn btn-sm btn-primary shadow-sm mr-1 mb-1">
+		        <i class="fas fa-fw fa-search fa-sm text-white-50"></i>
+		        <span class="text">Cek Tagihan Belum Lunas</span>
+		    </a>
+	    	<a href="<?= base_url('tagihan/cek_pelunasan/'); ?>" class="btn btn-sm btn-secondary shadow-sm mr-1 mb-1">
+		        <i class="fas fa-fw fa-search fa-sm text-white-50"></i>
+		        <span class="text">Cek Pelunasan By Akun</span>
+		    </a>
+	    </div>
 	</div>
 
   	<div class="row clearfix">
@@ -30,9 +40,7 @@
 			      <th scope="col">Nama</th>
 			      <th scope="col">Alamat</th>
 			      <th scope="col">No Telp</th>
-			      <th scope="col">Paket</th>
 			      <th scope="col">Nomor Air</th>
-			      <th scope="col">Iuran Bulanan</th>
 			      <th scope="col">Tagihan Saat Ini</th>
 			      <th scope="col">Status</th>
 			      <th scope="col">Action</th>

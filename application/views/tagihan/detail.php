@@ -73,21 +73,6 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="id_paket" class="col-sm-4 form-label">Paket</label>
-							<div class="col-sm-8">
-								<label>
-									<?php 
-
-										foreach ($dt_paket as $row) :
-											if($row['id_paket'] == $dtByID->id_paket) {
-												echo $row['nama'].' (Rp. '.number_format($row['nilai']).' ,-)';
-											}
-										endforeach;
-									?>
-								</label>
-							</div>
-						</div>
-						<div class="form-group row">
 							<label for="stts" class="col-sm-4 form-label">Status</label>
 							<div class="col-sm-8">
 								<label>

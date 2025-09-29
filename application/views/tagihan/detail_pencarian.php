@@ -63,12 +63,6 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="id_paket" class="col-sm-3 col-form-label">Paket</label>
-			    			<div class="col-sm-9">
-								<label for="id_paket" class="col-form-label"><?= $dtPaketById['nama'] ?></label>
-							</div>
-						</div>
-						<div class="form-group row">
 							<label for="bln" class="col-sm-3 col-form-label">Bulan
 							<button id="button_bln_sekarang" class="btn btn-sm btn-success">Saat ini</button> </label>
 							<input type="hidden" class="form-control" id="bln_sekarang" name="bln_sekarang" value="<?= $bulan; ?>" required="">

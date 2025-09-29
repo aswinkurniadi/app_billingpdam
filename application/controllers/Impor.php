@@ -11,7 +11,6 @@ class Impor extends CI_Controller
         $this->load->model('Pelanggan_model','pelanggan');
     }
     
-	// data tagihan keseluruhan
     public function index()
     {
         $data['title'] = 'Impor';
@@ -25,5 +24,20 @@ class Impor extends CI_Controller
         $this->load->view('templates/topbar', $data);
         $this->load->view('auth/index', $data);
         $this->load->view('templates/footer');
+    }
+
+    public function tambah()
+    {
+        // tulis code disini..
+    }
+
+    public function preview()
+    {
+        // tulis code disini..
+    }
+
+    public function hapus()
+    {
+        // tulis code disini..
     }
 }

@@ -96,7 +96,13 @@
             });
             </script>
 
-            <?php if ($this->uri->segment(1) == 'dashboard') : ?>
+
+
+
+
+
+
+<?php if ($this->uri->segment(1) == 'analysis' || $this->uri->segment(1) == 'dashboard') : ?>
             <!-- Chart -->
             <script src="<?= base_url(); ?>assets/vendor/chart/Chart.min.js"></script>
 
@@ -130,7 +136,7 @@
                     return s.join(dec);
                 }
 
-                // Area Chart Example
+                // Area Chart
                 var ctx = document.getElementById("myAreaChart");
                 console.log(ctx);
                 var myLineChart = new Chart(ctx, {
@@ -138,7 +144,7 @@
                     data: {
                         labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
                         datasets: [{
-                                label: "Omset",
+                                label: "Pemasukan",
                                 lineTension: 0.3,
                                 backgroundColor: "rgba(78, 115, 223, 0.05)",
                                 borderColor: "rgba(78, 115, 223, 1)",
@@ -150,7 +156,22 @@
                                 pointHoverBorderColor: "#5a5c69",
                                 pointHitRadius: 10,
                                 pointBorderWidth: 2,
-                                data: <?= json_encode($chart); ?>,
+                                data: <?= json_encode($chart_cash_in); ?>,
+                            }, 
+                            {
+                                label: "Pengeluaran",
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(251, 162, 162, 1)",
+                                borderColor: "rgba(244, 11, 11, 1)",
+                                pointRadius: 3,
+                                pointBackgroundColor: "rgba(244, 11, 11, 1)",
+                                pointBorderColor: "rgba(244, 11, 11, 1)",
+                                pointHoverRadius: 3,
+                                pointHoverBackgroundColor: "#5a5c69",
+                                pointHoverBorderColor: "#5a5c69",
+                                pointHitRadius: 10,
+                                pointBorderWidth: 2,
+                                data: <?= json_encode($chart_cash_out); ?>,
                             }
                         ],
                     },
@@ -217,8 +238,41 @@
                     }
                 });
 
+                // Pie Chart Example
+            var ctx = document.getElementById("myPieChart");
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ["Pemasukan", "Pengeluaran"],
+                    datasets: [{
+                        data: [<?= $kas_masuk; ?>, <?= $kas_keluar; ?>],
+                        backgroundColor: ['#4e73df', '#e74a3b'],
+                        hoverBackgroundColor: ['#5a5c69', '#5a5c69'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyFontColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        xPadding: 15,
+                        yPadding: 15,
+                        displayColors: false,
+                        caretPadding: 10,
+                    },
+                    legend: {
+                        display: false
+                    },
+                    cutoutPercentage: 80,
+                },
+            });
             </script>
         <?php endif; ?>
+
+
         </body>
 
     </html> 

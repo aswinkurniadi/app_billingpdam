@@ -44,8 +44,6 @@ class Pelanggan extends CI_Controller
         $no = $_POST['start'];
         foreach ($list as $customers) {
             
-            $paket = $this->admin->GetDataById('paket','id_paket', $customers->id_paket);
-            
             $no++;
             $row = array();
             $row[] = $no;
@@ -53,9 +51,7 @@ class Pelanggan extends CI_Controller
             $row[] = $customers->nm;
             $row[] = $customers->almt;
             $row[] = $customers->no_telp;
-            $row[] = $paket['nama'];
             $row[] = $customers->nomor_air;
-            $row[] = 'Rp. '.number_format($paket['nilai'],0,',','.').' ,-';
             $row[] = $customers->stts == 0 ? "<span class='badge badge-danger'>Non-Aktif</span>" : "<span class='badge badge-success'>Aktif</span>" ;
             
             $row[] = '<a href="'.base_url('pelanggan/detail/').$customers->id_plng.'" class="badge badge-success">
@@ -105,17 +101,12 @@ class Pelanggan extends CI_Controller
             $data['no_plng'] = $no_new_now;
         }
 
-
-        // daftar paket        
-        $data['dt_paket'] = $this->admin->getAllByTable('paket', 'id_paket', 'asc');
-
         $this->form_validation->set_rules('no_plng','', 'required');
         $this->form_validation->set_rules('tgl','', 'required');
         $this->form_validation->set_rules('nm','', 'required');
         $this->form_validation->set_rules('almt','', 'required');
         $this->form_validation->set_rules('no_telp','', 'required');
         $this->form_validation->set_rules('nomor_air','', 'required');
-        $this->form_validation->set_rules('id_paket','', 'required');
         $this->form_validation->set_rules('stts','', 'required');
 
         if($this->form_validation->run() == false) {
@@ -131,7 +122,6 @@ class Pelanggan extends CI_Controller
             // log
             $this->load->model('Log_model','riwayat');
             $this->riwayat->insert($data['user']['id_user'], 'tagihan/add', 'menambahkan pelanggan baru');
-
 
             $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Pelanggan berhasil ditambahkan 
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -156,15 +146,11 @@ class Pelanggan extends CI_Controller
         // data by id 
         $data['dtByID'] = $this->pelanggan->getCustomerById($id);
 
-        // daftar paket 
-        $data['dt_paket'] = $this->admin->getAllByTable('paket', 'id_paket', 'asc');
-
         $this->form_validation->set_rules('tgl','', 'required');
         $this->form_validation->set_rules('nm','', 'required');
         $this->form_validation->set_rules('almt','', 'required');
         $this->form_validation->set_rules('no_telp','', 'required');
         $this->form_validation->set_rules('nomor_air','', 'required');
-        $this->form_validation->set_rules('id_paket','', 'required');
         $this->form_validation->set_rules('stts','', 'required');
 
         if($this->form_validation->run() == false) {
@@ -217,9 +203,6 @@ class Pelanggan extends CI_Controller
 
         // data by id 
         $data['dtByID'] = $this->pelanggan->getCustomerById($id);
-
-        // daftar paket 
-        $data['dt_paket'] = $this->admin->getAllByTable('paket', 'id_paket', 'asc');
 
         if($data['dtByID']->stts == 2) {
             $data['dt_berhenti'] = $this->admin->GetDataById('plng_berhenti', 'id_plng', $id);            
@@ -317,7 +300,6 @@ class Pelanggan extends CI_Controller
                 'nm'        => $row['nm'],
                 'almt'      => $row['almt'],
                 'no_telp'   => $row['no_telp'],
-                'paket'     => $row['nm_paket'],
                 'sisa_tagihan'  => $sisa_tagihan,
             );
 

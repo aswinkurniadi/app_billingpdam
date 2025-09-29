@@ -40,8 +40,6 @@ class Tagihan extends CI_Controller
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $customers) {
-            
-            $paket = $this->admin->GetDataById('paket','id_paket',$customers->id_plng);
 
             // mencari tagihan terakhir
             $tagihan_in = $this->tagihan->getTagihanByTable('piutang_in', 'plng_id', $customers->id_plng);
@@ -79,8 +77,6 @@ class Tagihan extends CI_Controller
             $row[] = $customers->almt;
             $row[] = $customers->no_telp;
             $row[] = $customers->nomor_air;
-            $row[] = $paket['nama'];
-            $row[] = 'Rp. '.number_format($paket['nilai'],0,',','.').' ,-';
             $row[] = 'Rp. '.number_format($tagihan_saat_ini,0,',','.').' ,-';
             $row[] = "<span class='badge badge-".$stts_color."'>".$stts_tagihan."</span>";
             
@@ -119,9 +115,6 @@ class Tagihan extends CI_Controller
 
         // data by id 
         $data['dtByID'] = $this->pelanggan->getCustomerById($id);
-
-        // daftar paket 
-        $data['dt_paket'] = $this->admin->getAllByTable('paket', 'id_paket', 'asc');
 
         // riwayat tagihan
         $data['riw_tagihan'] = $this->tagihan->getDetailTagihan($id);
@@ -240,7 +233,7 @@ class Tagihan extends CI_Controller
     // laporan belum lunas
     public function laporan_belum_lunas()
     {
-        $data['title'] = 'Laporan Tagihan';
+        $data['title'] = 'Laporan Tagihan (Belum Lunas)';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['profile'] = $this->db->get_where('profile', ['id_profile' => 1])->row_array();
 
@@ -251,8 +244,6 @@ class Tagihan extends CI_Controller
         $result = array();
         $dtAllPlng = $this->pelanggan->getCustomer();
         foreach ($dtAllPlng as $customers) {
-            
-            $paket = $this->admin->GetDataById('paket','id_paket',$customers->id_plng);
 
             // mencari tagihan terakhir
             $tagihan_in = $this->tagihan->getTagihanByTable('piutang_in', 'plng_id', $customers->id_plng);
@@ -275,10 +266,8 @@ class Tagihan extends CI_Controller
                     'no_plng' => $customers->no_plng,
                     'nm' => $customers->nm,
                     'almt' => $customers->almt,
-                    'no_telp' => $customers->no_telp,
                     'nomor_air' => $customers->nomor_air,
-                    'paket' => $paket['nama'],
-                    'nilai' => 'Rp. '.number_format($paket['nilai'],0,',','.').' ,-',
+                    'no_telp' => $customers->no_telp,
                     'tag_saat_ini' => 'Rp. '.number_format($tagihan_saat_ini,0,',','.').' ,-'
                 );
             }
@@ -549,8 +538,6 @@ class Tagihan extends CI_Controller
 
                             $tagihan_saat_ini = $nilai_tagih - $nilai_bayar;
 
-                            // nm paket
-                            $paketById = $this->admin->GetDataById('paket','id_paket', $row['id_paket']);
 
 
                             if($tagihan_saat_ini >= 0){
@@ -559,7 +546,6 @@ class Tagihan extends CI_Controller
                                     'no_plng'  => $row['no_plng'],
                                     'nomor_air'=> $row['nomor_air'],
                                     'nm'       => $row['nm'],
-                                    'paket'    => $paketById['nama'],
                                     'almt'     => $row['almt'],
                                     'tagihan'  => $tagihan_saat_ini,
                                 );
@@ -633,9 +619,6 @@ class Tagihan extends CI_Controller
 
         $data['tagihan_saat_ini'] = $nilai_tagih - $nilai_bayar;
 
-        // nm paket
-        $data['dtPaketById'] = $this->admin->GetDataById('paket','id_paket', $data['dtByID']->id_paket);
-
         // data kas
         $data['dtByIDkas'] = $this->admin->getAllByTable('kas', 'id_kas', 'asc');
 
@@ -696,7 +679,6 @@ class Tagihan extends CI_Controller
                 $tgl = $this->input->post('tgl', true);
                 $id_kas = $this->input->post('kas', true);
                 $dtPlngById = $this->pelanggan->getCustomerById($id_plng);
-                $dtPaketById = $this->admin->GetDataById('paket','id_paket', $dtPlngById->id_paket);
                 $dKasById = $this->admin->GetDataById('kas', 'id_kas', $id_kas);
 
                 $save_bln = $this->input->post('bln', true);
@@ -711,7 +693,6 @@ class Tagihan extends CI_Controller
                     "almt"          => $dtPlngById->almt,
                     "no_telp"       => $dtPlngById->no_telp,
                     "nomor_air"     => $dtPlngById->nomor_air,
-                    "paket"         => $dtPaketById['nama'],
                     "bln"           => getBulan($save_bln),
                     "metode_byr"    => $dKasById['nm_kas'],
                     "nilai"         => $nilai_new,
@@ -852,7 +833,6 @@ class Tagihan extends CI_Controller
             $printer->text(buatBaris4Kolom("Alamat", ":", $myarray->almt));
             $printer->text(buatBaris4Kolom("Telp", ":", $myarray->no_telp));
             $printer->text(buatBaris4Kolom("Nomor Air", ":", $myarray->nomor_air));
-            $printer->text(buatBaris4Kolom("Paket", ":", $myarray->paket));
             $printer->text(buatBaris4Kolom("Metode", ":", $myarray->metode_byr));
             $printer->text(buatBaris4Kolom("Tagih", ":", $myarray->value));
             $printer->text(buatBaris4Kolom("Bulan", ":", $myarray->bln));
@@ -970,7 +950,6 @@ class Tagihan extends CI_Controller
 
 
         $dtPlngById = $this->pelanggan->getCustomerById($dtPelunasanById['plng_id']);
-        $dtPaketById = $this->admin->GetDataById('paket','id_paket', $dtPlngById->id_paket);
         $dKasById = $this->admin->GetDataById('kas', 'id_kas', $dtPelunasanById['id_kas']);
         $dtUserById = $this->admin->GetDataById('user', 'id_user', $dtPelunasanById['user_id']);
 
@@ -985,7 +964,6 @@ class Tagihan extends CI_Controller
             "almt"          => $dtPlngById->almt,
             "no_telp"       => $dtPlngById->no_telp,
             "nomor_air"     => $dtPlngById->nomor_air,
-            "paket"         => $dtPaketById['nama'],
             "bln"           => $dtPelunasanById['bln'],
             "metode_byr"    => $dKasById['nm_kas'],
             "nilai"         => $dtPelunasanById['nilai'],

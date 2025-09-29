@@ -1,7 +1,7 @@
 
-Subdomain : channel.saranganvision.com
+Subdomain : ebillpdam.kurniateknologiperkasa.com
 
-Database :
-Nama database :
-Paswrod :
+username : 
+Database : kurniate_ebillpdam
+Paswrod : ly=_gqXdtO0z
 
