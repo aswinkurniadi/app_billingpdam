@@ -45,7 +45,7 @@ class Tagihan extends CI_Controller
             $tagihan_in = $this->tagihan->getTagihanByTable('piutang_in', 'plng_id', $customers->id_plng);
             $nilai_tagih  = 0;
             foreach($tagihan_in as $pin){
-                $nilai_tagih += $pin->nilai;
+                $nilai_tagih += $pin->nilai_tagihan;
             }
 
             $tagihan_out = $this->tagihan->getTagihanByTable('piutang_out', 'plng_id', $customers->id_plng);
@@ -110,31 +110,44 @@ class Tagihan extends CI_Controller
         $this->load->model('Admin_model','admin');
 
         date_default_timezone_set('Asia/Jakarta');
-        $data['now'] = date("Y-m-d H:i:s");
+        $data['now'] = date("Y-m-d");
         $data['bulan'] = date("m");
 
         // data by id 
         $data['dtByID'] = $this->pelanggan->getCustomerById($id);
 
         // riwayat tagihan
-        $data['riw_tagihan'] = $this->tagihan->getDetailTagihan($id);
+        $dt_piutang_in_by_id = $this->tagihan->getAllTagihanById($id);
 
         // data kas
         $data['datakas'] = $this->admin->getAllByTable('kas', 'id_kas', 'asc');
 
         // tagihan terakhir
-        $saldo = 0;
-        foreach($data['riw_tagihan'] as $row) { 
-            if($row['type'] == 1) {
-                $id_piut = $row['id_piutang_in'];
-                $saldo += $row['nilai'];
-            } else {
-                $id_piut = $row['id_piutang_out'];
-                $saldo -= $row['nilai'];
+        $data['riw_tagihan'] =  array();
+        foreach($dt_piutang_in_by_id as $row) { 
+            // mendapatkan pelunasan piutang by id_piut_in
+            $dt_piutang_out_by_id_in = $this->admin->getAllDataById('piutang_out', 'tgl', 'ASC', 'id_piut_in', $row['id_piut']);
+            $nilai_terlunasi = 0;
+            foreach($dt_piutang_out_by_id_in as $row_out) {
+                $nilai_terlunasi += $row_out['nilai'];
             }
+
+            $dt_piutang_out = array(
+                'id_piut' => $row['id_piut'],
+                'date_created' => $row['date_created'],
+                'tgl' => $row['tgl'],
+                'name' => $row['name'],
+                'bln' => $row['bln'],
+                'nilai_tagihan' => $row['nilai_tagihan'],
+                'ket' => $row['ket'],
+                'dt_piutang_out' => $dt_piutang_out_by_id_in,
+                'nilai_terlunasi' => $nilai_terlunasi,
+            );
+
+            $data['riw_tagihan'][] = $dt_piutang_out;
         }
 
-        $data['tagihan_saat_ini'] = $saldo;
+        // $data['tagihan_saat_ini'] = $saldo;
 
 
         $this->load->view('templates/header', $data);
@@ -145,6 +158,37 @@ class Tagihan extends CI_Controller
     }
     // edit tagihan
 
+
+
+
+    public function get_detail_piutang_in()
+    {
+        // disini nanti menampilkan detail dari piutang in 
+        // stts utama, denda, subsidi, penyetaraan
+        $id_piut = $this->input->post('id_piut');
+
+        if (!$id_piut) {
+            show_error('ID Piutang tidak ditemukan', 400);
+        }
+
+
+        // load model
+        $this->load->model('Admin_model', 'admin');
+
+        // ambil data piutang_in dan piutang_out
+        $piutang_in  = $this->admin->getAllDataById('piutang_in_detail', 'id_piut_in_detail', 'ASC', 'id_piut_in', $id_piut);
+        $piutang_out = $this->tagihan->getAllPelunasanById($id_piut);
+
+        // kirim ke view
+        $data = [
+            'piutang_in'  => $piutang_in,
+            'piutang_out' => $piutang_out
+        ];
+
+        $this->load->view('tagihan/modal/detail_piutang_modal', $data);
+    }
+
+
     // tambah tagihan
     public function tambah_tagihan()
     {
@@ -153,7 +197,9 @@ class Tagihan extends CI_Controller
         $hide       = array("Rp", ".", " ");
         $nilai_new  = str_replace($hide, "", $nilai);
 
+        // header
         $this->tagihan->insertTagihanBaru($nilai_new);
+        
         $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Tagihan baru berhasil ditambahkan!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -208,20 +254,23 @@ class Tagihan extends CI_Controller
     {
         $data = $this->db->get_where('piutang_in', ['id_piut' => $id])->row();
 
-        $this->tagihan->deleteTagihan('piutang_in', $id);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role has been deleted!
+        $this->admin->deleteDataById('piutang_out', 'id_piut_in', $id);
+        $this->admin->deleteDataById('piutang_in_detail', 'id_piut_in', $id);
+        $this->admin->deleteDataById('piutang_in', 'id_piut', $id);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Semua detail tagihan berhasil dihapus!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button></div>');
                 redirect('tagihan/detail/'.$data->plng_id);
     }
 
-    public function deleteTagihanOut($id)
+    public function delete_piutang_out($id)
     {
         $data = $this->db->get_where('piutang_out', ['id_piut' => $id])->row();
 
         $this->tagihan->deleteTagihan('piutang_out', $id);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role has been deleted!
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pelunasan berhasil dihapus!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button></div>');

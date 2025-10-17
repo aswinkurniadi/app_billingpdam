@@ -102,18 +102,11 @@
 	            		</div>
 	            		<div class="col-sm-6 text-right">
 				            <a href="<?= base_url('pelanggan/ubah_stts_putus/'.$dtByID->id_plng); ?>" class="btn btn-primary btn-sm tambahpiutang" data-toggle="modal" data-target="#newPiutangCustomer" data-id_plng="<?= $dtByID->id_plng; ?>" data-nm="<?= $dtByID->nm; ?>">
-                      			<span class="icon text-white-50">
-                    			  	<i class="fas fa-fw fa-plus"></i>
-                    			</span>
-                    			<span class="text">Tambah</span>
-                    		</a>
-				            <a href="" class="btn btn-success btn-sm pelunasan" data-toggle="modal" data-target="#newPiutang"
-				            	data-id_plng="<?= $dtByID->id_plng; ?>"
-				      			data-nm="<?= $dtByID->nm; ?>"
-				      			data-bayar="<?= $tagihan_saat_ini; ?>">
-						        <i class="fas fa-fw fa-plus fa-sm text-white-50"></i>
-						        <span class="text">Tambah Pelunasan</span>
-						    </a>
+                			<span class="icon text-white-50">
+              			  	<i class="fas fa-fw fa-plus"></i>
+                			</span>
+                			<span class="text">Tambah</span>
+                		</a>
 	            		</div>
 	            	</div>
 	            </div>
@@ -123,14 +116,13 @@
 						  <thead>
 						    <tr>
 						      <th scope="col">#</th>
-						      <th scope="col">Waktu</th>
+						      <th scope="col">Detail</th>
+						      <th scope="col">Timestamp</th>
+						      <th scope="col">Tanggal</th>
 						      <th scope="col">User</th>
-						      <th scope="col">Metode Bayar</th>
-						      <th scope="col">Dibayar</th>
-						      <th scope="col">Diterima</th>
 						      <th scope="col">Bulan</th>
-						      <th scope="col">Debit</th>
-						      <th scope="col">Kredit</th>
+						      <th scope="col">Tagihan</th>
+						      <th scope="col">Terlunasi</th>
 						      <th scope="col">Saldo</th>
 						      <th scope="col">Ket</th>
 						      <th scope="col">Action</th>
@@ -141,80 +133,49 @@
 						  	$no = 1;
 							$saldo = 0;
 						  	foreach($riw_tagihan as $row) { 
-						  		if($row['type'] == 1) {
-									$id_piut = $row['id_piutang_in'];
-									$saldo += $row['nilai'];
-								} else {
-									$id_piut = $row['id_piutang_out'];
-									$saldo -= $row['nilai'];
-								}
-
+									$id_piut = $row['id_piut'];
+									$saldo = $row['nilai_tagihan'] - $row['nilai_terlunasi'];
 					  		?>
 						  	<tr>
 						  		<td><?= $no++; ?></td>
+						  		<td>
+						      		<div class="row" style="text-align: center;">
+
+							      		<a href="" class="badge badge-success detail_piutang_in mr-1" data-toggle="modal" data-target="#detailPiutangIn"
+						      				data-id_piut="<?= $id_piut; ?>">
+													  	<i class="fas fa-fw fa-list"></i>			
+										        <span class="text">Detail Tagihan</span>
+							      		</a>
+
+							      	</div>
+					      	</td>
+						  		<td><?= $row['date_created']; ?></td>
 						  		<td><?= $row['tgl']; ?></td>
 						  		<td><?= $row['name']; ?></td>
-						  		<td><?= $row['kas']; ?></td>
-						  		<td><?= $row['dibayar']; ?></td>
-						  		<td><?= $row['diterima']; ?></td>
 						  		<td><?= $row['bln']; ?></td>
-					  		<?php if($row['type'] == 1) { ?>
-						  		<td align="right"><?= number_format($row['nilai'],0,',','.'); ?></td>
-						  		<td></td>
-						  	<?php } else { ?>
-						  		<td></td>
-						  		<td align="right"><?= number_format($row['nilai'],0,',','.'); ?></td>
-						  	<?php } ?>
+						  		<td align="right"><?= number_format($row['nilai_tagihan'],0,',','.'); ?></td>
+						  		<td align="right"><?= number_format($row['nilai_terlunasi'],0,',','.'); ?></td>
 						  		<td align="right"><?= number_format($saldo,0,',','.'); ?></td>
 						  		<td><?= $row['ket']; ?></td>
 						  		<td>
-						      	<?php if($row['type'] == 1) { ?>
 						      		<div class="row" style="text-align: center;">
-							      		<a href="" class="badge badge-primary edit_piutang_in mr-1" data-toggle="modal" data-target="#editPiutangIn"
-						      				data-id_piut="<?= $id_piut; ?>"
-							            	data-id_plng="<?= $dtByID->id_plng; ?>"
-							      			data-nm="<?= $dtByID->nm; ?>"
-							      			data-bln="<?= $row['bln']; ?>"
-							      			data-tgl="<?= $row['tgl']; ?>"
-							      			data-nilai="<?= $row['nilai']; ?>"
-							      			data-id_kas="<?= $row['id_kas']; ?>"
-							      			data-ket="<?= $row['ket']; ?>"
-							      			data-type="<?= $row['type']; ?>">
-							      			<span class="icon text-white-50">
-											  	<i class="fas fa-fw fa-edit"></i>
-											</span>
-							      		</a>
-							      		<a href="<?= base_url(); ?>tagihan/deleteTagihanIn/<?= $id_piut; ?>" class="badge badge-danger mr-1" onclick="return confirm('Apakah ingin menghapus?');">
-							      			<span class="icon text-white-50">
+						      			<?php if($saldo != 0) { ?>
+						            <a href="" class="btn btn-success btn-sm pelunasan mb-2 mr-2" data-toggle="modal" data-target="#newPiutang"
+								            data-id_piut="<?= $id_piut; ?>"
+								            data-id_plng="<?= $dtByID->id_plng; ?>"
+								      			data-nm="<?= $dtByID->nm; ?>"
+								      			data-nilai="<?= $row['nilai_tagihan']; ?>">
+										        <i class="fas fa-fw fa-plus fa-sm text-white-50"></i>
+										        <span class="text">Pelunasan</span>
+										    </a>
+										  <?php } ?>
+
+							      		<a href="<?= base_url(); ?>tagihan/deleteTagihanIn/<?= $id_piut; ?>" class="btn btn-sm btn-danger mb-2" onclick="return confirm('Apakah ingin menghapus? Semua detail pada piutang in, akan terhapus');">
+
 											  	<i class="fas fa-fw fa-trash"></i>
-											</span>
+									        <span class="text">Hapus</span>
 							      		</a>
 							      	</div>
-					      		<?php } else { ?>
-					      			<div class="row" style="text-align: center;">
-						      			<a href="" class="badge badge-primary edit_piutang_out mr-1" data-toggle="modal" data-target="#editPiutangOut"
-						      				data-id_piut="<?= $id_piut; ?>"
-							            	data-id_plng="<?= $dtByID->id_plng; ?>"
-							      			data-nm="<?= $dtByID->nm; ?>"
-							      			data-bln="<?= $row['bln']; ?>"
-							      			data-tgl="<?= $row['tgl']; ?>"
-							      			data-nilai="<?= $row['nilai']; ?>"
-							      			data-id_kas="<?= $row['id_kas']; ?>"
-							      			data-ket="<?= $row['ket']; ?>"
-							      			data-dibayar="<?= $row['dibayar']; ?>"
-							      			data-diterima="<?= $row['diterima']; ?>"
-							      			data-type="<?= $row['type']; ?>">
-							      			<span class="icon text-white-50">
-											  	<i class="fas fa-fw fa-edit"></i>
-											</span>
-							      		</a>
-							      		<a href="<?= base_url(); ?>tagihan/deleteTagihanOut/<?= $id_piut; ?> mr-1" class="badge badge-danger" onclick="return confirm('Apakah ingin menghapus?');">
-							      			<span class="icon text-white-50">
-											  	<i class="fas fa-fw fa-trash"></i>
-											</span>
-							      		</a>
-							      	</div>
-					      		<?php }; ?>
 						      	</div>
 
 						  	</tr>
@@ -235,6 +196,8 @@
 </div>
 <!-- End of Main Content -->
 
+
+
 <!-- Modal -->
 <div class="modal fade" id="newPiutang" tabindex="-1" role="dialog" aria-labelledby="newPiutangLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -248,11 +211,15 @@
       <form action="<?= base_url('tagihan/tambah_pelunasan'); ?>" method="post">
 	      <div class="modal-body">
 	        <div class="form-group">
-			    <input type="datetime-local" class="form-control" id="tgl" name="tgl" value="<?= $now; ?>" required="">
+			    <input type="date" class="form-control" id="tgl" name="tgl" value="<?= $now; ?>" required="">
 			</div>
 			<div class="form-group">
-				<input type="hidden" class="form-control" id="id_plng" name="id_plng" placeholder="ID" required="">
-				<input type="text" class="form-control" id="nm_plng" name="nm_plng" placeholder="Nama Pelanggan" readonly="" required="">
+				<input type="text" class="form-control" placeholder="Nama Pelanggan" value="Akun : <?= $user['name']; ?>" readonly="" required="">
+			</div>
+			<div class="form-group">
+				<input type="hidden" class="form-control" id="id_piut_lunas" name="id_piut" placeholder="ID" required="">
+				<input type="hidden" class="form-control" id="id_plng_lunas" name="id_plng" placeholder="ID" required="">
+				<input type="text" class="form-control" id="nm_plng_lunas" name="nm_plng" placeholder="Nama Pelanggan" readonly="" required="">
 			</div>
 			<div class="form-group">
 				<select class="form-control bootstrap-select" id="bln" name="bln" class="form-control" title="Pilih Bulan" required>
@@ -271,7 +238,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-			    <input type="text" class="form-control" id="value" name="value" placeholder="Nilai Piutang" required="">
+			    <input type="text" class="form-control" id="value_lunas" name="value" placeholder="Nilai Piutang" required="">
 			</div>
 			<div class="form-group">
 		    	<select type="text" class="form-control bootstrap-select" id="kas" name="kas" title="Pilih Kas" data-container="body" data-live-search="true" required>
@@ -300,6 +267,34 @@
 </div> 
 
 
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$('.pelunasan').on('click',function(){
+	
+	    var id_piut = $(this).data('id_piut');
+	    var id_plng = $(this).data('id_plng');
+	    var nm_plng = $(this).data('nm');
+	    var tagih_awal = $(this).data('nilai');
+
+	    var	number_string = tagih_awal.toString(),
+				sisa 	= number_string.length % 3,
+				rupiah 	= number_string.substr(0, sisa),
+				ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+					
+			if (ribuan) {
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+
+	    $("#id_piut_lunas").val(id_piut);
+	    $("#id_plng_lunas").val(id_plng);
+	    $("#nm_plng_lunas").val(nm_plng);
+	    $("#value_lunas").val('Rp. ' + rupiah);
+	});
+});
+
+</script>
 
 <!-- Modal -->
 <div class="modal fade" id="newPiutangCustomer" tabindex="-1" role="dialog" aria-labelledby="newPiutangCustomerLabel" aria-hidden="true">
@@ -314,7 +309,7 @@
       <form action="<?= base_url('tagihan/tambah_tagihan'); ?>" method="post">
 	      <div class="modal-body">
 	        <div class="form-group">
-			    <input type="datetime-local" class="form-control" id="tgl" name="tgl" value="<?= $now; ?>" required="">
+			    <input type="date" class="form-control" id="tgl" name="tgl" value="<?= $now; ?>" required="">
 			</div>
 			<div class="form-group">
 				<input type="hidden" class="form-control" id="id_plng_tambah" name="id_plng" placeholder="ID" required="">
@@ -340,7 +335,7 @@
 			    <input type="text" class="form-control" id="value_tambah" name="value" placeholder="Nilai Tagihan" required="">
 			</div>
 			<div class="form-group">
-			    <input type="text" class="form-control" id="ket" name="ket" placeholder="Alasan penambahan tagihan manual" required="">
+			    <input type="text" class="form-control" id="ket" name="ket" placeholder="Keterangan Tambahan">
 			</div>
 	      </div>
 	      <div class="modal-footer">
@@ -353,13 +348,77 @@
 </div> 
 <!-- Tutup piutang cust -->
 
+<!-- menampilkan detail dari piutang in (dari controller) -->
+<div class="modal fade" id="detailPiutangIn" tabindex="-1" role="dialog" aria-labelledby="detailPiutangInLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailPiutangInLabel">Detail Tagihan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        	<!-- menampilkan modal dari sini -->
+
+      </div>
+      <div class="modal-footer">
+      </div> 
+    </div>
+  </div>
+</div> 
+
+
+<script type="text/javascript">
+	
+$(document).ready(function(){
+	$('.tambahpiutang').on('click',function(){
+	
+	    var id_plng = $(this).data('id_plng');
+	    var nm_plng = $(this).data('nm');
+
+	    $("#id_plng_tambah").val(id_plng);
+	    $("#nm_plng_tambah").val(nm_plng);
+	});
+
+	// script ajax ambil data dari database
+  // ketika tombol detail diklik
+  $(document).on("click", ".detail_piutang_in", function(e) {
+    e.preventDefault();
+
+    let id_piut = $(this).data("id_piut");
+
+    // kosongkan isi modal dulu agar tidak menumpuk
+    $("#detailPiutangIn .modal-body").html('<p class="text-center text-muted">Loading data...</p>');
+
+    // panggil controller via AJAX
+    $.ajax({
+      url: "<?= base_url('tagihan/get_detail_piutang_in'); ?>",
+      type: "POST",
+      data: { id_piut: id_piut },
+      dataType: "html", // kita terima HTML langsung
+      success: function(response) {
+
+        $("#detailPiutangIn .modal-body").html(response);
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+        $("#detailPiutangIn .modal-body").html('<div class="alert alert-danger">Gagal memuat data!</div>');
+      }
+    });
+  });
+
+});
+
+</script>
+
 
 <!-- Modal -->
 <div class="modal fade" id="editPiutangIn" tabindex="-1" role="dialog" aria-labelledby="editPiutangInLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editPiutangInLabel">Ubah Tagihan</h5>
+        <h5 class="modal-title" id="editPiutangInLabel">Ubah Tagihan In</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -367,7 +426,7 @@
       <form action="<?= base_url('tagihan/ubah_tagihan'); ?>" method="post">
 	      <div class="modal-body">
 	        <div class="form-group">
-			    <input type="datetime-local" class="form-control" id="tgl_edit" name="tgl_edit" required="" readonly>
+			    <input type="date" class="form-control" id="tgl_edit" name="tgl_edit" required="" readonly>
 			</div>
 			<div class="form-group">
 				<input type="hidden" class="form-control" id="id_piut_edit" name="id_piut_edit" placeholder="ID" required="">
@@ -409,6 +468,7 @@
 <!-- Tambah piutang cust -->
 
 
+
 <!-- Modal -->
 <div class="modal fade" id="editPiutangOut" tabindex="-1" role="dialog" aria-labelledby="editPiutangOutLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -422,7 +482,7 @@
       <form action="<?= base_url('tagihan/ubah_tagihan'); ?>" method="post">
 	      <div class="modal-body">
 	        <div class="form-group">
-			    <input type="datetime-local" class="form-control" id="tgl_edit1" name="tgl_edit" required="" readonly>
+			    <input type="date" class="form-control" id="tgl_edit1" name="tgl_edit" required="" readonly>
 			</div>
 			<div class="form-group">
 				<input type="hidden" class="form-control" id="id_piut_edit1" name="id_piut_edit" placeholder="ID" required="">
@@ -506,35 +566,6 @@ $(document).ready(function(){
 	}
 });
 
-	$('.tambahpiutang').on('click',function(){
-	
-	    var id_plng = $(this).data('id_plng');
-	    var nm_plng = $(this).data('nm');
-
-	    $("#id_plng_tambah").val(id_plng);
-	    $("#nm_plng_tambah").val(nm_plng);
-	});
-
-	$('.pelunasan').on('click',function(){
-	
-	    var id_plng = $(this).data('id_plng');
-	    var nm_plng = $(this).data('nm');
-	    var tagih_awal = $(this).data('bayar');
-
-	    var	number_string = tagih_awal.toString(),
-			sisa 	= number_string.length % 3,
-			rupiah 	= number_string.substr(0, sisa),
-			ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-				
-		if (ribuan) {
-			separator = sisa ? '.' : '';
-			rupiah += separator + ribuan.join('.');
-		}
-
-	    $("#id_plng").val(id_plng);
-	    $("#nm_plng").val(nm_plng);
-	    $("#value").val('Rp. ' + rupiah);
-	});
 
 	$('.edit_piutang_in').on('click',function(){
 	

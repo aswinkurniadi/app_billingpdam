@@ -29,6 +29,7 @@ class Tagihan_model extends CI_Model
         // join
         $query = "
             SELECT 
+                a.date_created,
                 b.name,
                 a.id_piut as id_piutang_in, 
                 '-' as id_piutang_out, 
@@ -37,7 +38,7 @@ class Tagihan_model extends CI_Model
                 '-' as dibayar,
                 '-' as diterima,
                 a.bln,
-                a.nilai,
+                a.nilai_tagihan as nilai,
                 '-' as id_kas,
                 '-' as kas,
                 a.ket,
@@ -49,6 +50,7 @@ class Tagihan_model extends CI_Model
             UNION
 
             SELECT 
+                a.date_created,
                 b.name,
                 '-' as id_piutang_out, 
                 a.id_piut as id_piutang_out, 
@@ -77,40 +79,106 @@ class Tagihan_model extends CI_Model
         return $this->db->delete($table, ['id_piut' => $id]);
     }
 
-    // Tambah baru
+
+
+
+
+
+
+
+
+
+
+
+
+    // Tambah tagihan baru
+    public function getAllTagihanById($id_plng)
+    {
+        $this->db->select('a.*, b.name');
+        $this->db->from('piutang_in a');
+        $this->db->join('user b', 'a.user_id = b.id_user','left');
+        $this->db->where_in('a.plng_id', $id_plng);
+        return $this->db->get()->result_array();
+    }
+
+    public function getAllPelunasanById($id_piut_in)
+    {
+        $this->db->select('a.*, b.name, c.nm_kas');
+        $this->db->from('piutang_out a');
+        $this->db->join('user b', 'a.user_id = b.id_user','left');
+        $this->db->join('kas c', 'a.id_kas = c.id_kas','left');
+        $this->db->where_in('a.id_piut_in', $id_piut_in);
+        return $this->db->get()->result_array();
+    }
+
+
     public function insertTagihanBaru($nilai_new)
     {
         $dt_user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $tgl = $this->input->post('tgl', true);
 
         $data = [
-            "id_piut"   => "",
-            "plng_id"   => $this->input->post('id_plng', true),
-            "nilai"     => intval($nilai_new),
-            "bln"       => $this->input->post('bln', true),
-            "tgl"       => $this->input->post('tgl', true),
-            "user_id"   => $dt_user['id_user'],
-            "ket"       => $this->input->post('ket', true),
+            "id_piut"       => "",
+            "plng_id"       => $this->input->post('id_plng', true),
+            "nilai_tagihan" => intval($nilai_new),
+            "bln"           => $this->input->post('bln', true),
+            "tgl"           => $this->input->post('tgl', true),
+            "user_id"       => $dt_user['id_user'],
+            "ket"           => $this->input->post('ket', true),
         ];
 
         $this->db->insert('piutang_in', $data);
+        $id = $this->db->insert_id();
+
+        $this->insertDetailTagihanIn($tgl, $id, 'utama', $nilai_new);
     }
+
+    public function insertDetailTagihanIn($tgl, $id, $stts, $nilai)
+    {
+        $data = [
+            "tgl"           => $tgl,
+            "id_piut_in"    => $id,
+            "stts"          => $stts,
+            "nilai"         => $nilai,
+        ];
+
+        $this->db->insert('piutang_in_detail', $data);
+    }
+    // tutup tambah tagihan baru
+
+    // update tagihan baru
+    public function updateTagihanIn()
+    {
+        // update nilai header
+
+    }
+
+
     
+
+
+
+
+
+
+
+
     // Tambah baru
     public function insertPelunasan($nilai_new)
     {
         $dt_user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         
         $data = [
-            "id_piut"   => "",
-            "plng_id"   => $this->input->post('id_plng', true),
-            "nilai"     => intval($nilai_new),
-            "bln"       => $this->input->post('bln', true),
-            "id_kas"    => $this->input->post('kas', true),
-            "tgl"   => $this->input->post('tgl', true),
-            "user_id"   => $dt_user['id_user'],
-            "dibayar"   => $this->input->post('dibayar', true),
-            "diterima"  => $this->input->post('diterima', true),
-            "ket"       => $this->input->post('ket', true),
+            "id_piut_in"    => $this->input->post('id_piut', true),
+            "plng_id"       => $this->input->post('id_plng', true),
+            "nilai"         => intval($nilai_new),
+            "bln"           => $this->input->post('bln', true),
+            "id_kas"        => $this->input->post('kas', true),
+            "tgl"           => $this->input->post('tgl', true),
+            "user_id"       => $dt_user['id_user'],
+            "dibayar"       => $this->input->post('dibayar', true),
+            "diterima"      => $this->input->post('diterima', true),
+            "ket"           => $this->input->post('ket', true),
         ];
 
         $this->db->insert('piutang_out', $data);

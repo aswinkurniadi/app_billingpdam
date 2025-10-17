@@ -47,13 +47,7 @@
   <li class="nav-item">
     <a class="nav-link" href="<?= base_url('tagihanbaru'); ?>">
       <i class="fas fa-file-upload"></i>
-      <span>Tagihan</span></a>
-  </li>
-
-  <li class="nav-item">
-    <a class="nav-link pt-0" href="<?= base_url('catatmeter'); ?>">
-      <i class="fas fa-chart-line"></i>
-      <span>Catat Meter</span></a>
+      <span>Catat Meter & Tagihan</span></a>
   </li>
 
   <li class="nav-item">

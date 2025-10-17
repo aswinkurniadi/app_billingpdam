@@ -100,6 +100,16 @@ class Admin_model extends CI_Model
 		return $query;
 	}
 
+    public function getAllDataById($table, $primary, $urut, $id_where, $value)
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->where($id_where, $value);
+        $this->db->order_by($primary, $urut);
+        $query = $this->db->get()->result_array();
+        return $query;
+    }
+
 	public function GetDataById($table, $primary, $value)
 	{
 		return $this->db->get_where($table, [$primary => $value])->row_array();
@@ -119,5 +129,11 @@ class Admin_model extends CI_Model
 	public function deleteDataById($table, $primary, $value)
 	{
 		return $this->db->delete($table, [$primary => $value]);
+	}
+
+	public function getDataByLike($table, $column, $like)
+	{
+		$this->db->like($column, $like);
+		return $this->db->get($table)->result();;
 	}
 }
